@@ -31,7 +31,9 @@ import java.util.List;
  * index = 2 is "ab", which is an anagram of "ab".
  */
 public class Anagrams {
+  // Store count of current window of text
   int[] TC = new int[256];
+  // Store count of all chars of pattern
   int[] PC = new int[256];
 
   /**
@@ -49,21 +51,24 @@ public class Anagrams {
     List<Integer> result = new ArrayList<>();
     int pLen = p.length();
     if (pLen > s.length()) return result;
-    Arrays.fill(TC, 0);
-    Arrays.fill(PC, 0);
+    
     for (int i = 0; i < pLen; i++) {
       TC[s.charAt(i)]++;
       PC[p.charAt(i)]++;
     }
 
-    int i = pLen;
-    for (int l = s.length(); i < l; i++) {
+    // Traverse through remaining characters of pattern
+    for (int i = pLen; i < s.length(); i++) {
       if (compare()) result.add(i - pLen);
 
+      // Add current character to current window
       TC[s.charAt(i)]++;
+      // Remove the first character of previous window
       TC[s.charAt(i - pLen)]--;
     }
-    if (compare()) result.add(i - pLen);
+    
+    // Check for the last window in text
+    if (compare()) result.add(s.length() - pLen);
 
     return result;
   }
